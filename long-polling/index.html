@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Long Polling</title>
+  </head>
+  <body>
+    <h1>Long Polling Example</h1>
+    <div id="result"></div>
+
+    <script>
+      const getData = async (lastData) => {
+        try {
+          const res = await fetch(`/getData?lastData=${lastData}`);
+          const result = await res.json();
+          document.getElementById("result").innerHTML = result.data;
+
+          getData(result.data);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+
+      getData();
+    </script>
+  </body>
+</html>

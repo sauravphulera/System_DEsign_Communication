@@ -1,0 +1,108 @@
+<html>
+  <head>
+    <title>Web Sockets</title>
+    <style>
+      .chatbox {
+        border: 1px solid black;
+        height: -webkit-fill-available;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+      }
+
+      .p8 {
+        padding: 8px;
+      }
+
+      .p16 {
+        padding: 16px;
+      }
+
+      .b {
+        border: 1px solid blue;
+      }
+      .wFull {
+        width: -webkit-fill-available;
+      }
+      .flex {
+        display: flex;
+      }
+      .gap20 {
+        gap: 20px;
+      }
+
+      #messages {
+        display: flex;
+        flex-direction: column;
+      }
+
+      button {
+        cursor: pointer;
+        background-color: blueviolet;
+        color: white;
+        padding: 4px 24px;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        box-shadow: 6px 7px 40px -4px rgba(0, 0, 0, 0.2);
+      }
+      button:hover {
+        background-color: rgb(155, 48, 255);
+        color: whitesmoke;
+        font-weight: bolder;
+      }
+
+      .msgBox {
+        padding: 8px 24px;
+        background: #6e5465;
+        width: 60%;
+        color: white;
+        font-family: sans-serif;
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chatbox p16">
+      <div class="p8 b">Chat Using Web Sockets</div>
+      <div id="messages"></div>
+      <form id="form" class="form wFull flex gap20">
+        <input class="input p8 wFull" type="text" name="data" id="input" />
+        <button>Send</button>
+      </form>
+    </div>
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+      const socket = window.io(); // or we can just write io()
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const messages = document.getElementById("messages");
+
+      let flag = 0;
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (input.value) {
+          console.log(input.value);
+          socket.emit("chat message", input.value);
+          flag = !flag;
+          input.value = "";
+        }
+      });
+
+      socket.on("chat message", (msg) => {
+        console.log("client: " + msg);
+        const div = document.createElement("div");
+        div.innerHTML = msg;
+        if (flag) {
+          div.style.borderRadius = "1px 24px 24px 16px";
+        } else {
+          div.style.borderRadius = "16px 1px 16px 16px";
+          div.style.alignSelf = "flex-end";
+        }
+        div.classList.add("msgBox");
+        messages.appendChild(div);
+      });
+    </script>
+  </body>
+</html>

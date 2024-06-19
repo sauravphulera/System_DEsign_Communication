@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Server Sent Events</title>
+  </head>
+  <body>
+    <h1>Server Sent Events Example</h1>
+    <div id="sse-data"></div>
+
+    <script>
+      // setup sse connection
+      const eventSource = new EventSource("/sse");
+      const eventList = document.getElementById("sse-data");
+      eventSource.onmessage = (e) => {
+        console.log(e);
+        const newElement = document.createElement("li");
+
+        newElement.textContent = `message: ${e.data}`;
+        eventList.appendChild(newElement);
+      };
+    </script>
+  </body>
+</html>
